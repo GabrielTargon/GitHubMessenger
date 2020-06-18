@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Chat View Controller-->
+        <scene sceneID="zCR-GA-J3w">
+            <objects>
+                <viewController storyboardIdentifier="ChatViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8kd-cJ-5Qu" customClass="ChatViewController" customModule="GitHubMessenger" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ivx-x9-izW">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="n80-n3-hVk">
+                                <rect key="frame" x="0.0" y="44" width="414" height="792"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="outgoingMessageCell" id="O0A-6S-glH">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="O0A-6S-glH" id="rK2-gk-d6N">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="incomingMessageCell" id="ymd-vh-FY4">
+                                        <rect key="frame" x="0.0" y="72" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ymd-vh-FY4" id="z6p-7P-u8L">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dl5-2f-a49">
+                                <rect key="frame" x="0.0" y="836" width="414" height="60"/>
+                                <subviews>
+                                    <textField autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type our text here" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="72o-97-ELb">
+                                        <rect key="frame" x="8" y="13" width="340" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vu3-Mk-7lu">
+                                        <rect key="frame" x="361" y="10" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="0eU-T6-Yvp"/>
+                                            <constraint firstAttribute="height" constant="40" id="nhl-zg-cYz"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Send"/>
+                                        <connections>
+                                            <action selector="sendMessage:" destination="8kd-cJ-5Qu" eventType="touchUpInside" id="9Am-G0-Itc"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.94117647058823528" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="vu3-Mk-7lu" firstAttribute="centerY" secondItem="72o-97-ELb" secondAttribute="centerY" id="5ZV-kC-mTZ"/>
+                                    <constraint firstItem="72o-97-ELb" firstAttribute="leading" secondItem="Dl5-2f-a49" secondAttribute="leading" constant="8" id="8gy-2n-YZi"/>
+                                    <constraint firstItem="72o-97-ELb" firstAttribute="top" secondItem="Dl5-2f-a49" secondAttribute="top" constant="13" id="GQs-P9-nof"/>
+                                    <constraint firstAttribute="trailing" secondItem="vu3-Mk-7lu" secondAttribute="trailing" constant="13" id="hJm-LY-8XE"/>
+                                    <constraint firstAttribute="height" constant="60" id="phN-7T-X1m"/>
+                                    <constraint firstItem="vu3-Mk-7lu" firstAttribute="leading" secondItem="72o-97-ELb" secondAttribute="trailing" constant="13" id="rwp-DF-2JE"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="n80-n3-hVk" firstAttribute="leading" secondItem="IM4-df-K3z" secondAttribute="leading" id="2M5-UO-OGQ"/>
+                            <constraint firstItem="IM4-df-K3z" firstAttribute="trailing" secondItem="Dl5-2f-a49" secondAttribute="trailing" id="4oH-u3-vhE"/>
+                            <constraint firstItem="IM4-df-K3z" firstAttribute="trailing" secondItem="n80-n3-hVk" secondAttribute="trailing" id="6Wy-np-rff"/>
+                            <constraint firstItem="n80-n3-hVk" firstAttribute="top" secondItem="IM4-df-K3z" secondAttribute="top" id="KSc-zd-Ay1"/>
+                            <constraint firstItem="n80-n3-hVk" firstAttribute="bottom" secondItem="Dl5-2f-a49" secondAttribute="top" id="ONQ-tg-MNm"/>
+                            <constraint firstAttribute="bottom" secondItem="Dl5-2f-a49" secondAttribute="bottom" id="V5q-nr-l2H"/>
+                            <constraint firstItem="Dl5-2f-a49" firstAttribute="leading" secondItem="IM4-df-K3z" secondAttribute="leading" id="Zeb-NI-YvW"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="IM4-df-K3z"/>
+                    </view>
+                    <connections>
+                        <outlet property="sendMessageButton" destination="vu3-Mk-7lu" id="hXL-Qv-HZB"/>
+                        <outlet property="sendMessageTextField" destination="72o-97-ELb" id="RTB-cs-iiL"/>
+                        <outlet property="sendMessageView" destination="Dl5-2f-a49" id="rIt-sd-05U"/>
+                        <outlet property="sendMessageViewBottomConstraint" destination="V5q-nr-l2H" id="nGV-tp-9wm"/>
+                        <outlet property="sendMessageViewHeightConstraint" destination="phN-7T-X1m" id="PZD-2B-IfF"/>
+                        <outlet property="tableView" destination="n80-n3-hVk" id="Hwo-dX-g92"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kd4-gz-Ua2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="179.71014492753625" y="126.5625"/>
+        </scene>
+    </scenes>
+</document>
