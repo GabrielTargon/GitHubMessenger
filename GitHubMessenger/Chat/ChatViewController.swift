@@ -11,6 +11,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol ChatDisplayLogic: class {
 //    func displaySomething(viewModel: Chat.Something.ViewModel)
@@ -32,8 +33,8 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @IBOutlet weak var sendMessageViewBottomConstraint: NSLayoutConstraint!
     
     //Variables
-    var user: NamesList.User?
-    private var messages: [Message]? = []
+    var user: NamesList.User
+    private var messages: [NSManagedObject] = []
     private let sendMessageViewHeight: CGFloat = 60
     private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
     private let sendMessageViewWidth: CGFloat = UIScreen.main.bounds.width
@@ -51,12 +52,14 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
+        user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
     
     required init?(coder aDecoder: NSCoder)
     {
+        user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(coder: aDecoder)
         setup()
     }
@@ -98,7 +101,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     }
     
     func setupView() {
-        title = user?.login
+        title = user.login
         sendMessageButton.isEnabled = false
         sendMessageTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         
@@ -122,6 +125,8 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         
         let nibOutgoing = UINib(nibName: "ChatOutgoingTableViewCell", bundle: nil)
         self.tableView.register(nibOutgoing, forCellReuseIdentifier: "outgoingMessageCell")
+        
+        getMessages()
     }
     
     private func setSendMessageViewFrame() {
@@ -139,14 +144,45 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     // MARK: Functions
     
     private func sendOutgoingMessage(_ message: String) {
-        let outgoingMsg = Message()
-        outgoingMsg.text = "\(message) \(message)"
-        outgoingMsg.type = .outgoing
-        outgoingMsg.date = NSDate()
-        
-        messages?.append(outgoingMsg)
+        saveMessage(text: message, type: "outgoing", date: Date(), friend: user.login)
         
         tableView.reloadData()
+    }
+    
+    func saveMessage(text: String, type: String, date: Date, friend: String) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Message", in: managedContext)!
+        let message = NSManagedObject(entity: entity, insertInto: managedContext)
+        message.setValue(text, forKeyPath: "text")
+        message.setValue(type, forKeyPath: "type")
+        message.setValue(date, forKeyPath: "date")
+        message.setValue(friend, forKeyPath: "friend")
+        
+        do {
+            try managedContext.save()
+            messages.append(message)
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func getMessages() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Message")
+        
+        do {
+            messages = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
     }
     
     @objc func editingChanged(sender: UITextField) {
@@ -202,11 +238,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     @IBAction func sendMessage(_ sender: Any) {
         if let text = sendMessageTextField.text {
-            let incomingMsg = Message()
-            incomingMsg.text = text
-            incomingMsg.date = NSDate()
-            incomingMsg.type = .incoming
-            messages?.append(incomingMsg)
+            saveMessage(text: text, type: "incoming", date: Date(), friend: user.login)
             
             sendOutgoingMessage(text)
             
@@ -222,18 +254,16 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     // MARK: TableView Functions
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = messages?.count {
-            return count
-        }
-        return 0
+        return messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let typeMsg = messages?[indexPath.row].type {
-            if typeMsg == .incoming {
+        let typeMsg = messages[indexPath.row]
+        if typeMsg.value(forKeyPath: "friend") as? String == user.login {
+            if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
                 let incomingCell = tableView.dequeueReusableCell(withIdentifier: "incomingMessageCell") as! ChatIncomingTableViewCell
                 return incomingCell
-            } else if typeMsg == .outgoing {
+            } else if typeMsg.value(forKeyPath: "type") as? String == "outgoing" {
                 let outgoingCell = tableView.dequeueReusableCell(withIdentifier: "outgoingMessageCell") as! ChatOutgoingTableViewCell
                 return outgoingCell
             }
@@ -243,7 +273,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if let messageText = messages?[indexPath.row].text {
+        if let messageText = messages[indexPath.row].value(forKeyPath: "text") as? String {
             let size = CGSize(width: 250, height: 100)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedFrame = NSString(string: messageText).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)], context: nil)
@@ -253,7 +283,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let text = messages?[indexPath.row].text else {
+        guard let text = messages[indexPath.row].value(forKeyPath: "text") as? String else {
             return
         }
         

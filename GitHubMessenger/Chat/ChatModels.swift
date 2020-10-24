@@ -11,23 +11,7 @@
 //
 
 import UIKit
-
-class Friend: NSObject {
-    var name: String?
-    var profileImageName: String?
-}
-
-class Message: NSObject {
-    var text: String?
-    var date: NSDate?
-    var type: MessageType?
-    var friend: Friend?
-}
-
-enum MessageType {
-    case incoming
-    case outgoing
-}
+import CoreData
 
 enum Chat
 {

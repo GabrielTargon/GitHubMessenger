@@ -34,6 +34,7 @@
 		B550AC022419E775004CA78D /* NamesListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B550AC002419E775004CA78D /* NamesListTableViewCell.swift */; };
 		B550AC032419E775004CA78D /* NamesListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B550AC012419E775004CA78D /* NamesListTableViewCell.xib */; };
 		B5C0D935249BB591005B1934 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */; };
+		B5C690F42542741A00D94705 /* Messenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5C690F22542741A00D94705 /* Messenger.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		B550AC002419E775004CA78D /* NamesListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListTableViewCell.swift; sourceTree = "<group>"; };
 		B550AC012419E775004CA78D /* NamesListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NamesListTableViewCell.xib; sourceTree = "<group>"; };
 		B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
+		B5C690F32542741A00D94705 /* Messenger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Messenger.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				B550ABBD2419DF9C004CA78D /* Assets.xcassets */,
 				B550ABBF2419DF9C004CA78D /* LaunchScreen.storyboard */,
 				B550ABC22419DF9C004CA78D /* Info.plist */,
+				B5C690F72542742200D94705 /* Model */,
 				B51DCC93241B269E0030C9F9 /* Chat */,
 				B550ABF12419E32E004CA78D /* NamesList */,
 				B5D2928B242711D000BE02D7 /* Support Files */,
@@ -189,6 +192,14 @@
 				B550AC012419E775004CA78D /* NamesListTableViewCell.xib */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		B5C690F72542742200D94705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B5C690F22542741A00D94705 /* Messenger.xcdatamodeld */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		B5D2928B242711D000BE02D7 /* Support Files */ = {
@@ -315,6 +326,7 @@
 				B550ABF92419E346004CA78D /* NamesListWorker.swift in Sources */,
 				B550ABB92419DF9A004CA78D /* ViewController.swift in Sources */,
 				B51DCC9A241B26CE0030C9F9 /* ChatPresenter.swift in Sources */,
+				B5C690F42542741A00D94705 /* Messenger.xcdatamodeld in Sources */,
 				B51DCC9C241B26CE0030C9F9 /* ChatRouter.swift in Sources */,
 				B5C0D935249BB591005B1934 /* UIDevice+Extension.swift in Sources */,
 				B51DCC9F241B26CE0030C9F9 /* ChatInteractor.swift in Sources */,
@@ -585,6 +597,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B5C690F22542741A00D94705 /* Messenger.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B5C690F32542741A00D94705 /* Messenger.xcdatamodel */,
+			);
+			currentVersion = B5C690F32542741A00D94705 /* Messenger.xcdatamodel */;
+			path = Messenger.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B550ABA92419DF9A004CA78D /* Project object */;
 }
