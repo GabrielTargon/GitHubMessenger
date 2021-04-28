@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B503C1322638DFBA0013E18F /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */; };
+		B503C1322638DFBA0013E18F /* BubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1312638DFBA0013E18F /* BubbleCell.swift */; };
 		B503C1342638E1A30013E18F /* ViewCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1332638E1A30013E18F /* ViewCode.swift */; };
 		B503C1362638FCB90013E18F /* CellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1352638FCB90013E18F /* CellType.swift */; };
+		B503C1382639FEB10013E18F /* SendMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1372639FEB10013E18F /* SendMessageView.swift */; };
 		B51DCC9A241B26CE0030C9F9 /* ChatPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */; };
 		B51DCC9B241B26CE0030C9F9 /* ChatWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */; };
 		B51DCC9C241B26CE0030C9F9 /* ChatRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */; };
@@ -47,9 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		B503C1312638DFBA0013E18F /* BubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleCell.swift; sourceTree = "<group>"; };
 		B503C1332638E1A30013E18F /* ViewCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCode.swift; sourceTree = "<group>"; };
 		B503C1352638FCB90013E18F /* CellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellType.swift; sourceTree = "<group>"; };
+		B503C1372639FEB10013E18F /* SendMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageView.swift; sourceTree = "<group>"; };
 		B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPresenter.swift; sourceTree = "<group>"; };
 		B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWorker.swift; sourceTree = "<group>"; };
 		B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRouter.swift; sourceTree = "<group>"; };
@@ -98,19 +100,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B51D20D32422BC36005607E3 /* Cell */ = {
+		B51D20D32422BC36005607E3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */,
+				B503C1312638DFBA0013E18F /* BubbleCell.swift */,
 				B503C1352638FCB90013E18F /* CellType.swift */,
+				B503C1372639FEB10013E18F /* SendMessageView.swift */,
 			);
-			path = Cell;
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		B51DCC93241B269E0030C9F9 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				B51D20D32422BC36005607E3 /* Cell */,
+				B51D20D32422BC36005607E3 /* Cells */,
 				B51DCCA0241B26F60030C9F9 /* Chat.storyboard */,
 				B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */,
 				B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */,
@@ -315,7 +318,8 @@
 				B550AC022419E775004CA78D /* NamesListTableViewCell.swift in Sources */,
 				B51DCC9D241B26CE0030C9F9 /* ChatModels.swift in Sources */,
 				B550ABF82419E346004CA78D /* NamesListPresenter.swift in Sources */,
-				B503C1322638DFBA0013E18F /* ChatBubbleCell.swift in Sources */,
+				B503C1322638DFBA0013E18F /* BubbleCell.swift in Sources */,
+				B503C1382639FEB10013E18F /* SendMessageView.swift in Sources */,
 				B550ABFB2419E346004CA78D /* NamesListModels.swift in Sources */,
 				B550ABF92419E346004CA78D /* NamesListWorker.swift in Sources */,
 				B550ABB92419DF9A004CA78D /* ViewController.swift in Sources */,

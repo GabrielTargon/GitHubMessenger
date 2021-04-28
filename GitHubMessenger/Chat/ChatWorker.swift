@@ -12,9 +12,6 @@
 
 import UIKit
 
-class ChatWorker
-{
-  func doSomeWork()
-  {
-  }
+class ChatWorker {
+  func doSomeWork() {}
 }

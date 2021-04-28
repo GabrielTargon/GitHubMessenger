@@ -13,20 +13,12 @@
 import UIKit
 import CoreData
 
-enum Chat
-{
+enum Chat {
     // MARK: Use cases
     
-    enum Something
-    {
-        struct Request
-        {
-        }
-        struct Response
-        {
-        }
-        struct ViewModel
-        {
-        }
+    enum Something {
+        struct Request {}
+        struct Response {}
+        struct ViewModel {}
     }
 }

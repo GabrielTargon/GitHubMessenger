@@ -15,7 +15,7 @@ import Foundation
 
 enum NamesList {
     // MARK: Use cases
-    
+
     enum Name {
         struct Request {
             let user: User
@@ -27,8 +27,7 @@ enum NamesList {
             let user: User
         }
     }
-    
-    
+
     struct User: Codable {
         let login: String
         let id: Int
@@ -48,7 +47,6 @@ enum NamesList {
             self.avatarUrl = avatar
         }
     }
-    
 }
 
 

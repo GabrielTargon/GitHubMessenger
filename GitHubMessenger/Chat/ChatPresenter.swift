@@ -12,19 +12,16 @@
 
 import UIKit
 
-protocol ChatPresentationLogic
-{
+protocol ChatPresentationLogic {
   func presentSomething(response: Chat.Something.Response)
 }
 
-class ChatPresenter: ChatPresentationLogic
-{
+class ChatPresenter: ChatPresentationLogic {
   weak var viewController: ChatDisplayLogic?
   
   // MARK: Do something
   
-  func presentSomething(response: Chat.Something.Response)
-  {
+  func presentSomething(response: Chat.Something.Response) {
     let viewModel = Chat.Something.ViewModel()
 //    viewController?.displaySomething(viewModel: viewModel)
   }

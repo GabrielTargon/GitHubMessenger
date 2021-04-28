@@ -41,7 +41,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     private var isKeyboardVisible: Bool = false
     private var willDismissKeyboard: Bool = false
     private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
-    private var cellIdentifier = String(describing: ChatBubbleCell.self)
+    private var cellIdentifier = String(describing: BubbleCell.self)
     
     // MARK: Object lifecycle
     
@@ -51,15 +51,13 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         return viewController
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder)
-    {
+    required init?(coder aDecoder: NSCoder) {
         user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(coder: aDecoder)
         setup()
@@ -120,7 +118,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     private func setupTableView() {
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.register(ChatBubbleCell.self, forCellReuseIdentifier: cellIdentifier)
+        self.tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
         
         getMessages()
     }
@@ -257,11 +255,11 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         let typeMsg = messages[indexPath.row]
         if typeMsg.value(forKeyPath: "friend") as? String == user.login {
             if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
-                let incomingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ChatBubbleCell
+                let incomingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! BubbleCell
                 incomingCell.type = .incoming
                 return incomingCell
             } else if typeMsg.value(forKeyPath: "type") as? String == "outgoing" {
-                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ChatBubbleCell
+                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! BubbleCell
                 outgoingCell.type = .outgoing
                 return outgoingCell
             }
@@ -285,7 +283,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         
-        guard let chatCell = cell as? ChatBubbleCell else {
+        guard let chatCell = cell as? BubbleCell else {
             return
         }
         

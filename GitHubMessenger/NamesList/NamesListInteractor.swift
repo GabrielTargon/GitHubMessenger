@@ -12,24 +12,20 @@
 
 import UIKit
 
-protocol NamesListBusinessLogic
-{
+protocol NamesListBusinessLogic {
     func handleNameTouched(request: NamesList.Name.Request)
     func handleGetUserInfo()
 }
 
-protocol NamesListDataStore
-{
+protocol NamesListDataStore {
     //var name: String { get set }
 }
 
-class NamesListInteractor: NamesListBusinessLogic, NamesListDataStore
-{
+class NamesListInteractor: NamesListBusinessLogic, NamesListDataStore {
     var presenter: NamesListPresentationLogic?
     var worker: NamesListWorker?
     
-    func handleNameTouched(request: NamesList.Name.Request)
-    {
+    func handleNameTouched(request: NamesList.Name.Request) {
         worker = NamesListWorker()
         
         let response = NamesList.Name.Response(user: request.user)

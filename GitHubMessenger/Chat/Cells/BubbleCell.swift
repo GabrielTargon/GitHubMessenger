@@ -1,5 +1,5 @@
 //
-//  ChatBubbleCell.swift
+//  BubbleCell.swift
 //  GitHubMessenger
 //
 //  Created by Gabriel Targon on 27/04/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChatBubbleCell: UITableViewCell {
+class BubbleCell: UITableViewCell {
     
     lazy var bubbleImage: UIImageView = {
         let image = UIImageView()
@@ -27,7 +27,7 @@ class ChatBubbleCell: UITableViewCell {
         return label
     }()
     
-    var type: Type = .incoming
+    var type: BubbleType = .incoming
     
     // MARK: - Lifecycle
     
@@ -51,7 +51,7 @@ class ChatBubbleCell: UITableViewCell {
     
     // MARK: - Methods
     
-    func setLabelSize(messageText: String, type: Type) {
+    func setLabelSize(messageText: String, type: BubbleType) {
         bubbleLabel.text = messageText
         
         let size = CGSize(width: 250, height: 100)
@@ -72,13 +72,13 @@ class ChatBubbleCell: UITableViewCell {
         setBubbleSize(type: type)
     }
     
-    func setBubbleSize(type: Type) {
+    func setBubbleSize(type: BubbleType) {
         guard let image = UIImage(named: type.image) else { return }
         bubbleImage.image = image.resizableImage(withCapInsets: UIEdgeInsets(top: 13, left: type.bubbleEdgeLeft, bottom: 13, right: type.bubbleEdgeRight), resizingMode: .stretch)
     }
 }
 
-extension ChatBubbleCell: ViewCode {
+extension BubbleCell: ViewCode {
     func setupHierarchy() {
         addSubview(bubbleImage)
         addSubview(bubbleLabel)

@@ -31,18 +31,4 @@ class NamesListRouter: NSObject, NamesListRoutingLogic, NamesListDataPassing {
         chatView.user = userInfo
         viewController?.navigationController?.pushViewController(chatView, animated: true)
     }
-    
-    // MARK: Navigation
-    
-    //func navigateToSomewhere(source: NamesListViewController, destination: SomewhereViewController)
-    //{
-    //  source.show(destination, sender: nil)
-    //}
-    
-    // MARK: Passing data
-    
-    //func passDataToSomewhere(source: NamesListDataStore, destination: inout SomewhereDataStore)
-    //{
-    //  destination.name = source.name
-    //}
 }

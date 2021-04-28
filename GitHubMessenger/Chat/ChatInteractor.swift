@@ -12,26 +12,17 @@
 
 import UIKit
 
-protocol ChatBusinessLogic
-{
+protocol ChatBusinessLogic {
   func doSomething(request: Chat.Something.Request)
 }
 
-protocol ChatDataStore
-{
-  //var name: String { get set }
-}
-
-class ChatInteractor: ChatBusinessLogic, ChatDataStore
-{
+class ChatInteractor: ChatBusinessLogic, ChatDataStore {
   var presenter: ChatPresentationLogic?
   var worker: ChatWorker?
-  //var name: String = ""
   
   // MARK: Do something
   
-  func doSomething(request: Chat.Something.Request)
-  {
+  func doSomething(request: Chat.Something.Request) {
     worker = ChatWorker()
     worker?.doSomeWork()
     

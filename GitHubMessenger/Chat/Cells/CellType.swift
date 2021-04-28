@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum Type {
+enum BubbleType {
     case incoming
     case outgoing
     
