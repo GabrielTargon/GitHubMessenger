@@ -41,6 +41,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     private var isKeyboardVisible: Bool = false
     private var willDismissKeyboard: Bool = false
     private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
+    private var cellIdentifier = String(describing: ChatBubbleCell.self)
     
     // MARK: Object lifecycle
     
@@ -119,12 +120,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     private func setupTableView() {
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        
-        let nibIncoming = UINib(nibName: "ChatIncomingTableViewCell", bundle: nil)
-        self.tableView.register(nibIncoming, forCellReuseIdentifier: "incomingMessageCell")
-        
-        let nibOutgoing = UINib(nibName: "ChatOutgoingTableViewCell", bundle: nil)
-        self.tableView.register(nibOutgoing, forCellReuseIdentifier: "outgoingMessageCell")
+        self.tableView.register(ChatBubbleCell.self, forCellReuseIdentifier: cellIdentifier)
         
         getMessages()
     }
@@ -261,10 +257,12 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         let typeMsg = messages[indexPath.row]
         if typeMsg.value(forKeyPath: "friend") as? String == user.login {
             if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
-                let incomingCell = tableView.dequeueReusableCell(withIdentifier: "incomingMessageCell") as! ChatIncomingTableViewCell
+                let incomingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ChatBubbleCell
+                incomingCell.type = .incoming
                 return incomingCell
             } else if typeMsg.value(forKeyPath: "type") as? String == "outgoing" {
-                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: "outgoingMessageCell") as! ChatOutgoingTableViewCell
+                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ChatBubbleCell
+                outgoingCell.type = .outgoing
                 return outgoingCell
             }
         }
@@ -287,11 +285,10 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         
-        if let incomingCell = cell as? ChatIncomingTableViewCell {
-            incomingCell.setLabelSize(messageText: text)
-        } else if let outgoingCell = cell as? ChatOutgoingTableViewCell {
-            outgoingCell.setLabelSize(messageText: text)
+        guard let chatCell = cell as? ChatBubbleCell else {
+            return
         }
+        
+        chatCell.setLabelSize(messageText: text, type: chatCell.type)
     }
-    
 }

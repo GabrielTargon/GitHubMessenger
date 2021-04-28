@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B51D20D62422BC6D005607E3 /* ChatIncomingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51D20D42422BC6D005607E3 /* ChatIncomingTableViewCell.swift */; };
-		B51D20D72422BC6D005607E3 /* ChatIncomingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D20D52422BC6D005607E3 /* ChatIncomingTableViewCell.xib */; };
-		B51D20DA2422BC7D005607E3 /* ChatOutgoingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51D20D82422BC7D005607E3 /* ChatOutgoingTableViewCell.swift */; };
-		B51D20DB2422BC7D005607E3 /* ChatOutgoingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51D20D92422BC7D005607E3 /* ChatOutgoingTableViewCell.xib */; };
+		B503C1322638DFBA0013E18F /* ChatBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */; };
+		B503C1342638E1A30013E18F /* ViewCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1332638E1A30013E18F /* ViewCode.swift */; };
+		B503C1362638FCB90013E18F /* CellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B503C1352638FCB90013E18F /* CellType.swift */; };
 		B51DCC9A241B26CE0030C9F9 /* ChatPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */; };
 		B51DCC9B241B26CE0030C9F9 /* ChatWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */; };
 		B51DCC9C241B26CE0030C9F9 /* ChatRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */; };
@@ -48,10 +47,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B51D20D42422BC6D005607E3 /* ChatIncomingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatIncomingTableViewCell.swift; sourceTree = "<group>"; };
-		B51D20D52422BC6D005607E3 /* ChatIncomingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatIncomingTableViewCell.xib; sourceTree = "<group>"; };
-		B51D20D82422BC7D005607E3 /* ChatOutgoingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOutgoingTableViewCell.swift; sourceTree = "<group>"; };
-		B51D20D92422BC7D005607E3 /* ChatOutgoingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatOutgoingTableViewCell.xib; sourceTree = "<group>"; };
+		B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleCell.swift; sourceTree = "<group>"; };
+		B503C1332638E1A30013E18F /* ViewCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCode.swift; sourceTree = "<group>"; };
+		B503C1352638FCB90013E18F /* CellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellType.swift; sourceTree = "<group>"; };
 		B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPresenter.swift; sourceTree = "<group>"; };
 		B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWorker.swift; sourceTree = "<group>"; };
 		B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRouter.swift; sourceTree = "<group>"; };
@@ -103,10 +101,8 @@
 		B51D20D32422BC36005607E3 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				B51D20D42422BC6D005607E3 /* ChatIncomingTableViewCell.swift */,
-				B51D20D52422BC6D005607E3 /* ChatIncomingTableViewCell.xib */,
-				B51D20D82422BC7D005607E3 /* ChatOutgoingTableViewCell.swift */,
-				B51D20D92422BC7D005607E3 /* ChatOutgoingTableViewCell.xib */,
+				B503C1312638DFBA0013E18F /* ChatBubbleCell.swift */,
+				B503C1352638FCB90013E18F /* CellType.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -206,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */,
+				B503C1332638E1A30013E18F /* ViewCode.swift */,
 			);
 			path = "Support Files";
 			sourceTree = "<group>";
@@ -295,9 +292,7 @@
 				B550ABBE2419DF9C004CA78D /* Assets.xcassets in Resources */,
 				B550ABBC2419DF9A004CA78D /* NamesList.storyboard in Resources */,
 				B51DCCA1241B26F60030C9F9 /* Chat.storyboard in Resources */,
-				B51D20DB2422BC7D005607E3 /* ChatOutgoingTableViewCell.xib in Resources */,
 				B550AC032419E775004CA78D /* NamesListTableViewCell.xib in Resources */,
-				B51D20D72422BC6D005607E3 /* ChatIncomingTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,9 +314,8 @@
 				B550ABFA2419E346004CA78D /* NamesListRouter.swift in Sources */,
 				B550AC022419E775004CA78D /* NamesListTableViewCell.swift in Sources */,
 				B51DCC9D241B26CE0030C9F9 /* ChatModels.swift in Sources */,
-				B51D20D62422BC6D005607E3 /* ChatIncomingTableViewCell.swift in Sources */,
 				B550ABF82419E346004CA78D /* NamesListPresenter.swift in Sources */,
-				B51D20DA2422BC7D005607E3 /* ChatOutgoingTableViewCell.swift in Sources */,
+				B503C1322638DFBA0013E18F /* ChatBubbleCell.swift in Sources */,
 				B550ABFB2419E346004CA78D /* NamesListModels.swift in Sources */,
 				B550ABF92419E346004CA78D /* NamesListWorker.swift in Sources */,
 				B550ABB92419DF9A004CA78D /* ViewController.swift in Sources */,
@@ -333,6 +327,8 @@
 				B550ABB52419DF9A004CA78D /* AppDelegate.swift in Sources */,
 				B51DCC9B241B26CE0030C9F9 /* ChatWorker.swift in Sources */,
 				B550ABB72419DF9A004CA78D /* SceneDelegate.swift in Sources */,
+				B503C1362638FCB90013E18F /* CellType.swift in Sources */,
+				B503C1342638E1A30013E18F /* ViewCode.swift in Sources */,
 				B51DCC9E241B26CE0030C9F9 /* ChatViewController.swift in Sources */,
 				B550ABFC2419E346004CA78D /* NamesListViewController.swift in Sources */,
 			);
