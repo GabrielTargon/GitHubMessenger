@@ -20,12 +20,17 @@ protocol NamesListDataPassing {
     var dataStore: NamesListDataStore? { get }
 }
 
-class NamesListRouter: NSObject, NamesListRoutingLogic, NamesListDataPassing {
-    weak var viewController: NamesListViewController?
+class NamesListRouter: NamesListDataPassing {
+    private weak var viewController: UIViewController?
     var dataStore: NamesListDataStore?
     
-    // MARK: Routing
-    
+    init(viewController: UIViewController, dataStore: NamesListDataStore?) {
+        self.viewController = viewController
+        self.dataStore = dataStore
+    }
+}
+
+extension NamesListRouter: NamesListRoutingLogic {
     func routeToChat(userInfo: NamesList.User) {
         let chatView = ChatViewController.instantiateNew()
         chatView.user = userInfo

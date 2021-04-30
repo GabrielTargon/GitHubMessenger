@@ -12,95 +12,65 @@
 
 import UIKit
 
-protocol NamesListDisplayLogic: class {
+protocol NamesListDisplayLogic: AnyObject {
     func displayChat(viewModel: NamesList.Name.ViewModel)
     func displayUserList(viewModel: [NamesList.User])
 }
 
 class NamesListViewController: UIViewController, NamesListDisplayLogic {
     //Architecture variables
+    typealias NamesListRoutingProtocol = NamesListRoutingLogic & NamesListDataPassing
     var interactor: NamesListBusinessLogic?
-    var router: (NSObjectProtocol & NamesListRoutingLogic & NamesListDataPassing)?
+    var router: (NamesListRoutingProtocol)?
     
-    //IBOutlets
+    var userList = [NamesList.User]()
+    private var cellIdentifier = String(describing: NameListCell.self)
+    
     @IBOutlet var tableView: UITableView!
     
-    //Variables
-    var indicator = UIActivityIndicatorView()
-    var userList: [NamesList.User]
-    
+    lazy var indicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        activityIndicator.style = .large
+        activityIndicator.center = self.view.center
+        activityIndicator.backgroundColor = .white
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
     
     // MARK: Object lifecycle
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        userList = [NamesList.User]()
-        
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+        setupNamesList()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        userList = [NamesList.User]()
-        
         super.init(coder: aDecoder)
-        setup()
+        setupNamesList()
     }
     
     // MARK: Setup
     
-    private func setup() {
+    func setupNamesList() {
         let viewController = self
-        let interactor = NamesListInteractor()
-        let presenter = NamesListPresenter()
-        let router = NamesListRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
-    }
-    
-    // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
+        let worker = NamesListWorker()
+        let presenter = NamesListPresenter(viewController: viewController)
+        let interactor = NamesListInteractor(presenter: presenter, worker: worker)
+        let router = NamesListRouter(viewController: viewController, dataStore: interactor)
+        self.interactor = interactor
+        self.router = router
     }
     
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupTableView()
-        activityIndicator()
+        setupView()
+        indicator.startAnimating()
         interactor?.handleGetUserInfo()
     }
     
-    func setupTableView() {
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        let nib = UINib(nibName: "NamesListTableViewCell", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "namesCell")
-    }
-    
     // MARK: Functions
-    
-    func activityIndicator() {
-        indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        indicator.style = .large
-        indicator.center = self.view.center
-        indicator.backgroundColor = .white
-        indicator.hidesWhenStopped = true
-        indicator.startAnimating()
-        self.view.addSubview(indicator)
-    }
     
     func displayChat(viewModel: NamesList.Name.ViewModel) {
         router?.routeToChat(userInfo: viewModel.user)
@@ -119,8 +89,7 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
 extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: TableView Functions
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "namesCell") as! NamesListTableViewCell
-        return cell.frame.size.height
+        return 85
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -128,24 +97,24 @@ extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "namesCell") as! NamesListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! NameListCell
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let userCell = cell as? NamesListTableViewCell {
+        if let userCell = cell as? NameListCell {
             if !userList.isEmpty {
                 indicator.stopAnimating()
                 
-                userCell.profileImage.image = nil
-                userCell.profileLabel.text = userList[indexPath.row].login
+                userCell.imageProfile.image = nil
+                userCell.labelProfile.text = userList[indexPath.row].login
                 
                 let url = URL(string: userList[indexPath.row].avatarUrl)
                 
                 DispatchQueue.global().async {
                     let data = try? Data(contentsOf: url!)
                     DispatchQueue.main.async {
-                        userCell.profileImage.image = UIImage(data: data!)
+                        userCell.imageProfile.image = UIImage(data: data!)
                     }
                 }
             }
@@ -154,7 +123,21 @@ extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         interactor?.handleNameTouched(request: NamesList.Name.Request(user: userList[indexPath.row]))
-        self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension NamesListViewController: ViewCode {
+    func setupHierarchy() {
+        view.addSubview(indicator)
     }
     
+    func setupConstraints() {
+        // No constraints needed
+    }
+    
+    func setupConfigurations() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(NameListCell.self, forCellReuseIdentifier: cellIdentifier)
+    }
 }

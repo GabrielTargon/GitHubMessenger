@@ -17,11 +17,15 @@ protocol NamesListPresentationLogic {
     func presentUserList(response: [NamesList.User])
 }
 
-class NamesListPresenter: NamesListPresentationLogic {
-    weak var viewController: NamesListDisplayLogic?
+class NamesListPresenter {
+    private weak var viewController: NamesListDisplayLogic?
     
-    // MARK: Do something
-    
+    init(viewController: NamesListDisplayLogic) {
+        self.viewController = viewController
+    }
+}
+
+extension NamesListPresenter: NamesListPresentationLogic {
     func presentChat(response: NamesList.Name.Response) {
         let viewModel = NamesList.Name.ViewModel(user: response.user)
         viewController?.displayChat(viewModel: viewModel)

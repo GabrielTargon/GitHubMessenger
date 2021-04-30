@@ -27,13 +27,13 @@ class NamesListWorker {
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                    print("Error with the response, unexpected status code: \(String(describing: response))")
-                    return
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Error with the response, unexpected status code: \(String(describing: response))")
+                return
             }
             
             if let data = data,
-                let wrapper = try? JSONDecoder().decode([NamesList.User].self, from: data) {
+               let wrapper = try? JSONDecoder().decode([NamesList.User].self, from: data) {
                 completionHandler(wrapper)
             } else {
                 completionHandler(nil)
@@ -47,5 +47,5 @@ class NamesListWorker {
 
 
 
- 
+
 

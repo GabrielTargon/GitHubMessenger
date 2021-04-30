@@ -13,14 +13,15 @@
 import UIKit
 import CoreData
 
-protocol ChatDisplayLogic: class {
+protocol ChatDisplayLogic: AnyObject {
 //    func displaySomething(viewModel: Chat.Something.ViewModel)
 }
 
 class ChatViewController: UIViewController, ChatDisplayLogic {
     //Architecture variables
+    typealias ChatRoutingProtocol = ChatRoutingLogic & ChatDataPassing
     var interactor: ChatBusinessLogic?
-    var router: (NSObjectProtocol & ChatRoutingLogic & ChatDataPassing)?
+    var router: (ChatRoutingProtocol)?
     
     //IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -33,7 +34,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @IBOutlet weak var sendMessageViewBottomConstraint: NSLayoutConstraint!
     
     //Variables
-    var user: NamesList.User
+    var user = NamesList.User(login: "", id: 0, avatar: "")
     private var messages: [NSManagedObject] = []
     private let sendMessageViewHeight: CGFloat = 60
     private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
@@ -52,78 +53,32 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        user = NamesList.User(login: "", id: 0, avatar: "")
         super.init(coder: aDecoder)
         setup()
     }
     
     // MARK: Setup
     
-    private func setup() {
-        let viewController = self
-        let interactor = ChatInteractor()
-        let presenter = ChatPresenter()
-        let router = ChatRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
-    }
-    
-    // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
+    func setup(interactor: ChatBusinessLogic? = nil, router: ChatRoutingProtocol? = nil) {
+        self.interactor = interactor
+        self.router = router
     }
     
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
-        setupTableView()
-        setSendMessageViewFrame()
-    }
-    
-    func setupView() {
-        title = user.login
-        sendMessageButton.isEnabled = false
-        sendMessageTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
-    }
-    
-    private func setupTableView() {
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
-        
         getMessages()
+        adjustSendMessageViewForKeyboardAndScreenSize()
     }
     
-    private func setSendMessageViewFrame() {
+    private func adjustSendMessageViewForKeyboardAndScreenSize() {
         if let content = self.sendMessageView {
             if UIDevice.current.screenType == .iPhonesX {
                 content.frame = CGRect.init(x: 0, y: (UIScreen.main.bounds.height - sendMessageViewHeightIphoneXAndLater), width: sendMessageViewWidth, height: sendMessageViewHeightIphoneXAndLater)
@@ -138,12 +93,11 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     // MARK: Functions
     
     private func sendOutgoingMessage(_ message: String) {
-        saveMessage(text: message, type: "outgoing", date: Date(), friend: user.login)
-        
+        saveMessage(text: message, type: .outgoing, date: Date(), friend: user.login)
         tableView.reloadData()
     }
     
-    func saveMessage(text: String, type: String, date: Date, friend: String) {
+    func saveMessage(text: String, type: ChatType, date: Date, friend: String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -152,7 +106,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         let entity = NSEntityDescription.entity(forEntityName: "Message", in: managedContext)!
         let message = NSManagedObject(entity: entity, insertInto: managedContext)
         message.setValue(text, forKeyPath: "text")
-        message.setValue(type, forKeyPath: "type")
+        message.setValue(type.rawValue, forKeyPath: "type")
         message.setValue(date, forKeyPath: "date")
         message.setValue(friend, forKeyPath: "friend")
         
@@ -191,7 +145,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     private func scrollToBottom() {
         let point = CGPoint(x: 0, y: tableView.contentSize.height + tableView.contentInset.bottom - tableView.frame.height)
-        if point.y >= 0{
+        if point.y >= 0 {
             tableView.setContentOffset(point, animated: true)
         }
         tableView.layoutIfNeeded()
@@ -221,7 +175,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         isKeyboardVisible = false
         willDismissKeyboard = false
         keyboardSize = CGRect.init(x: 0, y: 0, width: 0, height: 0)
-        setSendMessageViewFrame()
+        adjustSendMessageViewForKeyboardAndScreenSize()
     }
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -232,7 +186,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     @IBAction func sendMessage(_ sender: Any) {
         if let text = sendMessageTextField.text {
-            saveMessage(text: text, type: "incoming", date: Date(), friend: user.login)
+            saveMessage(text: text, type: .incoming, date: Date(), friend: user.login)
             
             sendOutgoingMessage(text)
             
@@ -241,8 +195,6 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
             scrollToBottom()
         }
     }
-    
-    
 }
 
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
@@ -288,5 +240,35 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         chatCell.setLabelSize(messageText: text, type: chatCell.type)
+    }
+}
+
+extension ChatViewController: ViewCode {
+    func setupHierarchy() {
+        
+    }
+    
+    func setupConstraints() {
+        
+    }
+    
+    func setupConfigurations() {
+        title = user.login
+        
+        // TableView
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
+        
+        // Actions
+        sendMessageTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        
+        // Observers
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 }

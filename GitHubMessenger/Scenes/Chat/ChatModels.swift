@@ -14,11 +14,20 @@ import UIKit
 import CoreData
 
 enum Chat {
-    // MARK: Use cases
-    
-    enum Something {
-        struct Request {}
+    enum Message {
+        struct Request {
+            let text: String
+            let type: ChatType
+            let date: String
+            let friend: String
+        }
+        
         struct Response {}
         struct ViewModel {}
     }
+}
+
+enum ChatType: String {
+    case incoming = "incoming"
+    case outgoing = "outgoing"
 }
