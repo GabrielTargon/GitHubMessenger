@@ -11,23 +11,41 @@
 //
 
 import UIKit
+import CoreData
 
 protocol ChatBusinessLogic {
+    func returnUserLogin() -> String
+    func getMessages() -> [NSManagedObject]
     func saveMessage(request: Chat.Message.Request)
 }
 
 protocol ChatDataStore {
-    //var name: String { get set }
+    var user: NamesList.User? { get set }
 }
 
 class ChatInteractor: ChatBusinessLogic, ChatDataStore {
     var presenter: ChatPresentationLogic?
     var worker: ChatWorker?
     
+    var user: NamesList.User?
+    
     init(presenter: ChatPresentationLogic,
          worker: ChatWorker) {
         self.presenter = presenter
         self.worker = worker
+    }
+    
+    func returnUserLogin() -> String {
+        guard let userSelected = user?.login else {
+            return String()
+        }
+        
+        return userSelected
+    }
+    
+    func getMessages() -> [NSManagedObject] {
+        guard let messages = worker?.getMessages() else { return [NSManagedObject]() }
+        return messages
     }
     
     func saveMessage(request: Chat.Message.Request) {

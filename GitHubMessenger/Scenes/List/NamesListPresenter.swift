@@ -13,7 +13,7 @@
 import UIKit
 
 protocol NamesListPresentationLogic {
-    func presentChat(response: NamesList.Name.Response)
+    func presentChat()
     func presentUserList(response: [NamesList.User])
 }
 
@@ -26,14 +26,11 @@ class NamesListPresenter {
 }
 
 extension NamesListPresenter: NamesListPresentationLogic {
-    func presentChat(response: NamesList.Name.Response) {
-        let viewModel = NamesList.Name.ViewModel(user: response.user)
-        viewController?.displayChat(viewModel: viewModel)
+    func presentChat() {
+        viewController?.displayChat()
     }
     
     func presentUserList(response: [NamesList.User]) {
         viewController?.displayUserList(viewModel: response)
     }
-    
-    
 }

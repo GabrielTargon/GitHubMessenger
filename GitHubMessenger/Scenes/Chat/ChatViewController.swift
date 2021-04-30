@@ -13,9 +13,7 @@
 import UIKit
 import CoreData
 
-protocol ChatDisplayLogic: AnyObject {
-//    func displaySomething(viewModel: Chat.Something.ViewModel)
-}
+protocol ChatDisplayLogic: AnyObject {}
 
 class ChatViewController: UIViewController, ChatDisplayLogic {
     //Architecture variables
@@ -34,7 +32,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @IBOutlet weak var sendMessageViewBottomConstraint: NSLayoutConstraint!
     
     //Variables
-    var user = NamesList.User(login: "", id: 0, avatar: "")
+    var user = String()
     private var messages: [NSManagedObject] = []
     private let sendMessageViewHeight: CGFloat = 60
     private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
@@ -54,12 +52,10 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
     }
     
     // MARK: Setup
@@ -74,8 +70,18 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        getMessages()
-        adjustSendMessageViewForKeyboardAndScreenSize()
+    }
+    
+    // MARK: Functions
+    
+    func getInfos() {
+        guard let userLogin = interactor?.returnUserLogin(),
+              let msg = interactor?.getMessages() else {
+            return
+        }
+        
+        user = userLogin
+        messages = msg
     }
     
     private func adjustSendMessageViewForKeyboardAndScreenSize() {
@@ -90,47 +96,9 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         }
     }
     
-    // MARK: Functions
-    
     private func sendOutgoingMessage(_ message: String) {
-        saveMessage(text: message, type: .outgoing, date: Date(), friend: user.login)
+        interactor?.saveMessage(request: Chat.Message.Request(text: message, type: .outgoing, date: Date(), friend: user))
         tableView.reloadData()
-    }
-    
-    func saveMessage(text: String, type: ChatType, date: Date, friend: String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "Message", in: managedContext)!
-        let message = NSManagedObject(entity: entity, insertInto: managedContext)
-        message.setValue(text, forKeyPath: "text")
-        message.setValue(type.rawValue, forKeyPath: "type")
-        message.setValue(date, forKeyPath: "date")
-        message.setValue(friend, forKeyPath: "friend")
-        
-        do {
-            try managedContext.save()
-            messages.append(message)
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
-    }
-    
-    func getMessages() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Message")
-        
-        do {
-            messages = try managedContext.fetch(fetchRequest)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
     }
     
     @objc func editingChanged(sender: UITextField) {
@@ -140,7 +108,6 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         }
         
         sendMessageButton.isEnabled = true
-        
     }
     
     private func scrollToBottom() {
@@ -186,7 +153,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     @IBAction func sendMessage(_ sender: Any) {
         if let text = sendMessageTextField.text {
-            saveMessage(text: text, type: .incoming, date: Date(), friend: user.login)
+            interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .incoming, date: Date(), friend: user))
             
             sendOutgoingMessage(text)
             
@@ -205,7 +172,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let typeMsg = messages[indexPath.row]
-        if typeMsg.value(forKeyPath: "friend") as? String == user.login {
+        if typeMsg.value(forKeyPath: "friend") as? String == user {
             if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
                 let incomingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! BubbleCell
                 incomingCell.type = .incoming
@@ -245,22 +212,25 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChatViewController: ViewCode {
     func setupHierarchy() {
-        
+        // No hierarchy needed
     }
     
     func setupConstraints() {
-        
+        // No constraints needed
     }
     
     func setupConfigurations() {
-        title = user.login
+        interactor?.getMessages()
+        getInfos()
+        
+        title = user
         
         // TableView
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 44
         
         // Actions
         sendMessageTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
@@ -270,5 +240,7 @@ extension ChatViewController: ViewCode {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
+        
+        adjustSendMessageViewForKeyboardAndScreenSize()
     }
 }

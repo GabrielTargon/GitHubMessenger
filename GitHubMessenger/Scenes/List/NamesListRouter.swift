@@ -13,7 +13,7 @@
 import UIKit
 
 protocol NamesListRoutingLogic {
-    func routeToChat(userInfo: NamesList.User)
+    func routeToChat()
 }
 
 protocol NamesListDataPassing {
@@ -31,9 +31,17 @@ class NamesListRouter: NamesListDataPassing {
 }
 
 extension NamesListRouter: NamesListRoutingLogic {
-    func routeToChat(userInfo: NamesList.User) {
-        let chatView = ChatViewController.instantiateNew()
-        chatView.user = userInfo
-        viewController?.navigationController?.pushViewController(chatView, animated: true)
+    func routeToChat() {
+        let vc = ChatFactory.setupChat()
+        var destinationDataStore = (vc as? ChatViewController)?.router?.dataStore
+        passDataToChat(source: dataStore, destination: &destinationDataStore)
+        viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension NamesListRouter {
+    func passDataToChat(source: NamesListDataStore?, destination: inout ChatDataStore?) {
+        guard let user = source?.user else { return }
+        destination?.user = user
     }
 }

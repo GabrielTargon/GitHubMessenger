@@ -133,8 +133,8 @@
 				B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */,
 				B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */,
 				B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */,
-				B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */,
 				B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */,
+				B51DCC96241B26CE0030C9F9 /* ChatRouter.swift */,
 				B51DCC97241B26CE0030C9F9 /* ChatModels.swift */,
 				B5A605C6263B72D200AE1CDD /* ChatFactory.swift */,
 			);

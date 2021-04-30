@@ -18,12 +18,17 @@ enum Chat {
         struct Request {
             let text: String
             let type: ChatType
-            let date: String
+            let date: Date
             let friend: String
         }
         
-        struct Response {}
-        struct ViewModel {}
+        struct Response {
+            let messages: [NSManagedObject]
+        }
+        
+        struct ViewModel {
+            let messages: [NSManagedObject]
+        }
     }
 }
 

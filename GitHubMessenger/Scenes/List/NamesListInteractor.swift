@@ -18,12 +18,15 @@ protocol NamesListBusinessLogic {
 }
 
 protocol NamesListDataStore {
-    //var name: String { get set }
+    var user: NamesList.User { get set }
 }
 
 class NamesListInteractor: NamesListBusinessLogic, NamesListDataStore {
+    
     var presenter: NamesListPresentationLogic?
     var worker: NamesListWorker?
+    
+    var user = NamesList.User(login: String(), id: Int(), avatar: String())
     
     init(presenter: NamesListPresentationLogic,
          worker: NamesListWorker) {
@@ -32,8 +35,8 @@ class NamesListInteractor: NamesListBusinessLogic, NamesListDataStore {
     }
     
     func handleNameTouched(request: NamesList.Name.Request) {
-        let response = NamesList.Name.Response(user: request.user)
-        presenter?.presentChat(response: response)
+        user = request.user
+        presenter?.presentChat()
     }
     
     func handleGetUserInfo() {

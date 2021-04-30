@@ -13,7 +13,7 @@
 import UIKit
 
 protocol NamesListDisplayLogic: AnyObject {
-    func displayChat(viewModel: NamesList.Name.ViewModel)
+    func displayChat()
     func displayUserList(viewModel: [NamesList.User])
 }
 
@@ -72,8 +72,8 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
     
     // MARK: Functions
     
-    func displayChat(viewModel: NamesList.Name.ViewModel) {
-        router?.routeToChat(userInfo: viewModel.user)
+    func displayChat() {
+        router?.routeToChat()
     }
     
     func displayUserList(viewModel: [NamesList.User]) {
@@ -83,7 +83,6 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
             self.tableView.reloadData()
         }
     }
-    
 }
 
 extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -136,8 +135,8 @@ extension NamesListViewController: ViewCode {
     }
     
     func setupConfigurations() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(NameListCell.self, forCellReuseIdentifier: cellIdentifier)
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.register(NameListCell.self, forCellReuseIdentifier: cellIdentifier)
     }
 }

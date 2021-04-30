@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ChatPresentationLogic {
-    func presentSomething(response: Chat.Message.Response)
+    func presentMessage(response: Chat.Message.Response)
 }
 
 class ChatPresenter {
@@ -25,8 +25,5 @@ class ChatPresenter {
 }
 
 extension ChatPresenter: ChatPresentationLogic {
-    func presentSomething(response: Chat.Message.Response) {
-        let viewModel = Chat.Message.ViewModel()
-        //    viewController?.displaySomething(viewModel: viewModel)
-    }
+    func presentMessage(response: Chat.Message.Response) {}
 }

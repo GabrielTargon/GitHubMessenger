@@ -10,7 +10,7 @@ import UIKit
 
 class ChatFactory {
     static func setupChat() -> UIViewController {
-        let viewController = ChatViewController()
+        let viewController = ChatViewController.instantiateNew()
         let worker = ChatWorker()
         let presenter = ChatPresenter(viewController: viewController)
         let interactor = ChatInteractor(presenter: presenter, worker: worker)

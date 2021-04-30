@@ -36,12 +36,11 @@ class ChatWorker {
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        
     }
     
-    func getMessage(result: @escaping (Result<Message, Error>) -> Void) {
+    func getMessages() -> [NSManagedObject] {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
+            return [NSManagedObject]()
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -49,8 +48,10 @@ class ChatWorker {
         
         do {
             messages = try managedContext.fetch(fetchRequest)
+            return messages
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            print("Error to load CoreData: \(error)")
+            return [NSManagedObject]()
         }
     }
 }

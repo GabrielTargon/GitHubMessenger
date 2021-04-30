@@ -20,7 +20,7 @@ protocol ChatDataPassing {
     var dataStore: ChatDataStore? { get }
 }
 
-class ChatRouter: ChatDataPassing {
+class ChatRouter: ChatDataPassing, ChatRoutingLogic {
     private weak var viewController: UIViewController?
     var dataStore: ChatDataStore?
     
@@ -28,8 +28,4 @@ class ChatRouter: ChatDataPassing {
         self.viewController = viewController
         self.dataStore = dataStore
     }
-}
-
-extension ChatRouter: ChatRoutingLogic {
-    
 }
