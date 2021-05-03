@@ -3,14 +3,15 @@
 
 ## Requirements
 
-- iOS 9.0+
-- Xcode 11+
+- iOS 14+
+- Xcode 12+
 - Swift 5.0
 
 ## Tech info
 
 - Clean swift
 - Core Data
+- Unit tests
 
 ## Informations
 
