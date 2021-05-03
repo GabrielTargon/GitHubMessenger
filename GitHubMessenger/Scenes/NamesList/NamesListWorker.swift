@@ -13,7 +13,11 @@
 import UIKit
 import Foundation
 
-class NamesListWorker {
+protocol NamesListWorkLogic {
+    func requestGitHubUserInfo(completionHandler: @escaping ([NamesList.User]?) -> Void)
+}
+
+class NamesListWorker: NamesListWorkLogic {
     private let domainUrlString = "https://api.github.com/"
     
     func requestGitHubUserInfo(completionHandler: @escaping ([NamesList.User]?) -> Void) {

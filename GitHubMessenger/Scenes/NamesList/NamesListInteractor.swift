@@ -24,12 +24,12 @@ protocol NamesListDataStore {
 class NamesListInteractor: NamesListBusinessLogic, NamesListDataStore {
     
     var presenter: NamesListPresentationLogic?
-    var worker: NamesListWorker?
+    var worker: NamesListWorkLogic?
     
     var user = NamesList.User(login: String(), id: Int(), avatar: String())
     
     init(presenter: NamesListPresentationLogic,
-         worker: NamesListWorker) {
+         worker: NamesListWorkLogic) {
         self.presenter = presenter
         self.worker = worker
     }

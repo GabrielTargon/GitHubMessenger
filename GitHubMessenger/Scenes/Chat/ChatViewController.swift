@@ -33,13 +33,13 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     //Variables
     var user = String()
-    private var messages: [NSManagedObject] = []
+    var messages: [NSManagedObject] = []
+    var isKeyboardVisible: Bool = false
+    var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
+    var willDismissKeyboard: Bool = false
     private let sendMessageViewHeight: CGFloat = 60
     private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
     private let sendMessageViewWidth: CGFloat = UIScreen.main.bounds.width
-    private var isKeyboardVisible: Bool = false
-    private var willDismissKeyboard: Bool = false
-    private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
     private var cellIdentifier = String(describing: BubbleCell.self)
     
     // MARK: Object lifecycle
@@ -96,7 +96,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         }
     }
     
-    private func sendOutgoingMessage(_ message: String) {
+    func sendOutgoingMessage(_ message: String) {
         interactor?.saveMessage(request: Chat.Message.Request(text: message, type: .outgoing, date: Date(), friend: user))
         tableView.reloadData()
     }
@@ -110,7 +110,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         sendMessageButton.isEnabled = true
     }
     
-    private func scrollToBottom() {
+    func scrollToBottom() {
         let point = CGPoint(x: 0, y: tableView.contentSize.height + tableView.contentInset.bottom - tableView.frame.height)
         if point.y >= 0 {
             tableView.setContentOffset(point, animated: true)

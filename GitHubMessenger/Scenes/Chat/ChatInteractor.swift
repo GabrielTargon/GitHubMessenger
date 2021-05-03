@@ -25,12 +25,12 @@ protocol ChatDataStore {
 
 class ChatInteractor: ChatBusinessLogic, ChatDataStore {
     var presenter: ChatPresentationLogic?
-    var worker: ChatWorker?
+    var worker: ChatWorkLogic?
     
     var user: NamesList.User?
     
     init(presenter: ChatPresentationLogic,
-         worker: ChatWorker) {
+         worker: ChatWorkLogic) {
         self.presenter = presenter
         self.worker = worker
     }

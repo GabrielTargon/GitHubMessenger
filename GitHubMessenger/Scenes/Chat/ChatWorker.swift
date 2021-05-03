@@ -13,7 +13,12 @@
 import UIKit
 import CoreData
 
-class ChatWorker {
+protocol ChatWorkLogic {
+    func saveMessage(msg: Chat.Message.Request)
+    func getMessages() -> [NSManagedObject]
+}
+
+class ChatWorker: ChatWorkLogic {
     
     private var messages: [NSManagedObject] = []
     

@@ -12,9 +12,7 @@
 
 import UIKit
 
-protocol ChatPresentationLogic {
-    func presentMessage(response: Chat.Message.Response)
-}
+protocol ChatPresentationLogic {}
 
 class ChatPresenter {
     private weak var viewController: ChatDisplayLogic?
@@ -24,6 +22,4 @@ class ChatPresenter {
     }
 }
 
-extension ChatPresenter: ChatPresentationLogic {
-    func presentMessage(response: Chat.Message.Response) {}
-}
+extension ChatPresenter: ChatPresentationLogic {}

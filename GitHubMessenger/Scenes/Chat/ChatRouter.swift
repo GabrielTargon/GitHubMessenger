@@ -12,9 +12,7 @@
 
 import UIKit
 
-@objc protocol ChatRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-}
+@objc protocol ChatRoutingLogic {}
 
 protocol ChatDataPassing {
     var dataStore: ChatDataStore? { get }

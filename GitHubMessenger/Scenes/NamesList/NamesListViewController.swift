@@ -57,6 +57,10 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
         let presenter = NamesListPresenter(viewController: viewController)
         let interactor = NamesListInteractor(presenter: presenter, worker: worker)
         let router = NamesListRouter(viewController: viewController, dataStore: interactor)
+        setup(interactor: interactor, router: router)
+    }
+    
+    func setup(interactor: NamesListBusinessLogic? = nil, router: NamesListRoutingProtocol? = nil) {
         self.interactor = interactor
         self.router = router
     }
