@@ -51,11 +51,6 @@ final class ChatViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.user, "Teste")
     }
     
-    func testSendOutgoingMessage() {
-        sut.sendOutgoingMessage("Testando")
-        XCTAssert(interactorSpy.saveMessageCalled)
-    }
-    
     func testSendMessage() {
         sut.sendMessage(UIButton.Event.touchUpInside)
         XCTAssert(interactorSpy.saveMessageCalled)

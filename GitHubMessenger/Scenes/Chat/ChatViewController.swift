@@ -34,12 +34,12 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     //Variables
     var user = String()
     var messages: [NSManagedObject] = []
-    var isKeyboardVisible: Bool = false
-    var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
-    var willDismissKeyboard: Bool = false
+    private var isKeyboardVisible: Bool = false
+    private var willDismissKeyboard: Bool = false
     private let sendMessageViewHeight: CGFloat = 60
     private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
     private let sendMessageViewWidth: CGFloat = UIScreen.main.bounds.width
+    private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
     private var cellIdentifier = String(describing: BubbleCell.self)
     
     // MARK: Object lifecycle
@@ -69,7 +69,13 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getInfos()
         setupView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scrollToBottom()
     }
     
     // MARK: Functions
@@ -94,11 +100,6 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
                 sendMessageViewHeightConstraint.constant = sendMessageViewHeight
             }
         }
-    }
-    
-    func sendOutgoingMessage(_ message: String) {
-        interactor?.saveMessage(request: Chat.Message.Request(text: message, type: .outgoing, date: Date(), friend: user))
-        tableView.reloadData()
     }
     
     @objc func editingChanged(sender: UITextField) {
@@ -154,8 +155,10 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @IBAction func sendMessage(_ sender: Any) {
         if let text = sendMessageTextField.text {
             interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .incoming, date: Date(), friend: user))
+            interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .outgoing, date: Date(), friend: user))
+            getInfos()
             
-            sendOutgoingMessage(text)
+            tableView.reloadData()
             
             sendMessageTextField.text = nil
             sendMessageButton.isEnabled = false
@@ -220,9 +223,6 @@ extension ChatViewController: ViewCode {
     }
     
     func setupConfigurations() {
-        interactor?.getMessages()
-        getInfos()
-        
         title = user
         
         // TableView
