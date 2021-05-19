@@ -19,7 +19,6 @@
 		B51DCC9D241B26CE0030C9F9 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC97241B26CE0030C9F9 /* ChatModels.swift */; };
 		B51DCC9E241B26CE0030C9F9 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */; };
 		B51DCC9F241B26CE0030C9F9 /* ChatInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */; };
-		B51DCCA1241B26F60030C9F9 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B51DCCA0241B26F60030C9F9 /* Chat.storyboard */; };
 		B550ABB52419DF9A004CA78D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B550ABB42419DF9A004CA78D /* AppDelegate.swift */; };
 		B550ABBC2419DF9A004CA78D /* NamesList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B550ABBA2419DF9A004CA78D /* NamesList.storyboard */; };
 		B550ABBE2419DF9C004CA78D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B550ABBD2419DF9C004CA78D /* Assets.xcassets */; };
@@ -88,7 +87,6 @@
 		B51DCC97241B26CE0030C9F9 /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInteractor.swift; sourceTree = "<group>"; };
-		B51DCCA0241B26F60030C9F9 /* Chat.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		B550ABB12419DF9A004CA78D /* GitHubMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B550ABB42419DF9A004CA78D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B550ABBB2419DF9A004CA78D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NamesList.storyboard; sourceTree = "<group>"; };
@@ -189,7 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				B51D20D32422BC36005607E3 /* Cells */,
-				B51DCCA0241B26F60030C9F9 /* Chat.storyboard */,
 				B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */,
 				B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */,
 				B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */,
@@ -462,7 +459,6 @@
 				B550ABC12419DF9C004CA78D /* LaunchScreen.storyboard in Resources */,
 				B550ABBE2419DF9C004CA78D /* Assets.xcassets in Resources */,
 				B550ABBC2419DF9A004CA78D /* NamesList.storyboard in Resources */,
-				B51DCCA1241B26F60030C9F9 /* Chat.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

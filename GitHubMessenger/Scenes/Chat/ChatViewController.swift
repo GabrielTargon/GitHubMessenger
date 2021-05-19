@@ -16,46 +16,65 @@ import CoreData
 protocol ChatDisplayLogic: AnyObject {}
 
 class ChatViewController: UIViewController, ChatDisplayLogic {
-    //Architecture variables
     typealias ChatRoutingProtocol = ChatRoutingLogic & ChatDataPassing
     var interactor: ChatBusinessLogic?
     var router: (ChatRoutingProtocol)?
     
-    //IBOutlets
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var sendMessageView: UIView!
-    @IBOutlet weak var sendMessageTextField: UITextField!
-    @IBOutlet weak var sendMessageButton: UIButton!
+    lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        return tableView
+    }()
     
-    //Constraints
-    @IBOutlet weak var sendMessageViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var sendMessageViewBottomConstraint: NSLayoutConstraint!
+    lazy var sendMessageView: SendMessageView = {
+        let view = SendMessageView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        view.sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        return view
+    }()
     
-    //Variables
+    lazy var grayBottomView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemGray5
+        return view
+    }()
+    
     var user = String()
     var messages: [NSManagedObject] = []
     private var isKeyboardVisible: Bool = false
     private var willDismissKeyboard: Bool = false
+    private var sendMessageFrameY: CGFloat = 34
     private let sendMessageViewHeight: CGFloat = 60
-    private let sendMessageViewHeightIphoneXAndLater: CGFloat = 94
-    private let sendMessageViewWidth: CGFloat = UIScreen.main.bounds.width
     private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
     private var cellIdentifier = String(describing: BubbleCell.self)
     
-    // MARK: Object lifecycle
+    private var sendMessageViewBottomConstraint = NSLayoutConstraint()
     
-    class func instantiateNew() -> ChatViewController {
-        guard let viewController = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: String(describing: self)) as? ChatViewController
-            else { fatalError("Couldn't instantiate \(String(describing: self))") }
-        return viewController
-    }
+    // MARK: Lifecycle
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        setupView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scrollToBottom()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getInfos()
     }
     
     // MARK: Setup
@@ -63,19 +82,6 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     func setup(interactor: ChatBusinessLogic? = nil, router: ChatRoutingProtocol? = nil) {
         self.interactor = interactor
         self.router = router
-    }
-    
-    // MARK: View lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        getInfos()
-        setupView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        scrollToBottom()
     }
     
     // MARK: Functions
@@ -88,27 +94,8 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         
         user = userLogin
         messages = msg
-    }
-    
-    private func adjustSendMessageViewForKeyboardAndScreenSize() {
-        if let content = self.sendMessageView {
-            if UIDevice.current.screenType == .iPhonesX {
-                content.frame = CGRect.init(x: 0, y: (UIScreen.main.bounds.height - sendMessageViewHeightIphoneXAndLater), width: sendMessageViewWidth, height: sendMessageViewHeightIphoneXAndLater)
-                sendMessageViewHeightConstraint.constant = sendMessageViewHeightIphoneXAndLater
-            } else {
-                content.frame = CGRect.init(x: 0, y: (UIScreen.main.bounds.height - sendMessageViewHeight), width: sendMessageViewWidth, height: sendMessageViewHeight)
-                sendMessageViewHeightConstraint.constant = sendMessageViewHeight
-            }
-        }
-    }
-    
-    @objc func editingChanged(sender: UITextField) {
-        guard let name = sendMessageTextField.text, !name.isEmpty else {
-            sendMessageButton.isEnabled = false
-            return
-        }
         
-        sendMessageButton.isEnabled = true
+        self.title = user
     }
     
     func scrollToBottom() {
@@ -133,8 +120,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            sendMessageViewHeightConstraint.constant = sendMessageViewHeight
-            sendMessageViewBottomConstraint.constant = keyboardFrame.height
+            sendMessageViewBottomConstraint.constant = -keyboardFrame.height + grayBottomView.frame.height
             scrollToBottom()
         }
     }
@@ -142,8 +128,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     @objc func keyboardDidHide(_ notification: NSNotification) {
         isKeyboardVisible = false
         willDismissKeyboard = false
-        keyboardSize = CGRect.init(x: 0, y: 0, width: 0, height: 0)
-        adjustSendMessageViewForKeyboardAndScreenSize()
+        keyboardSize = CGRect.zero
     }
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -152,16 +137,25 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     
     // MARK: Actions
     
-    @IBAction func sendMessage(_ sender: Any) {
-        if let text = sendMessageTextField.text {
+    @objc func editingChanged(sender: UITextField) {
+        guard let name = sendMessageView.textField.text, !name.isEmpty else {
+            sendMessageView.sendButton.isEnabled = false
+            return
+        }
+        
+        sendMessageView.sendButton.isEnabled = true
+    }
+    
+    @objc func sendMessage(_ sender: Any) {
+        if let text = sendMessageView.textField.text {
             interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .incoming, date: Date(), friend: user))
             interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .outgoing, date: Date(), friend: user))
             getInfos()
             
             tableView.reloadData()
             
-            sendMessageTextField.text = nil
-            sendMessageButton.isEnabled = false
+            sendMessageView.textField.text = nil
+            sendMessageView.sendButton.isEnabled = false
             scrollToBottom()
         }
     }
@@ -215,25 +209,42 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChatViewController: ViewCode {
     func setupHierarchy() {
-        // No hierarchy needed
+        view.addSubview(tableView)
+        view.addSubview(sendMessageView)
+        view.addSubview(grayBottomView)
     }
     
     func setupConstraints() {
-        // No constraints needed
+        sendMessageViewBottomConstraint = NSLayoutConstraint(item: sendMessageView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: grayBottomView, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            sendMessageView.heightAnchor.constraint(equalToConstant: sendMessageViewHeight),
+            sendMessageView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            sendMessageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sendMessageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sendMessageViewBottomConstraint,
+            
+            grayBottomView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            grayBottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            grayBottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            grayBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        ])
     }
     
     func setupConfigurations() {
-        title = user
+        view.backgroundColor = .white
         
         // TableView
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 44
-        
-        // Actions
-        sendMessageTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
+        tableView.allowsSelection = false
         
         // Observers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -241,6 +252,6 @@ extension ChatViewController: ViewCode {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
         
-        adjustSendMessageViewForKeyboardAndScreenSize()
+        sendMessageFrameY = sendMessageView.frame.origin.y
     }
 }

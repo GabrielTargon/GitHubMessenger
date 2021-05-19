@@ -79,4 +79,8 @@ extension BubbleCell: ViewCode {
     func setupConstraints() {
         // No constraints needed
     }
+    
+    func setupConfigurations() {
+        self.selectionStyle = .none
+    }
 }

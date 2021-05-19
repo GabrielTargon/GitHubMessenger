@@ -37,7 +37,7 @@ extension UIDevice {
             return .iPhones6
         case 1920, 2208:
             return .iPhonesPlus
-        case 1792, 2436, 2688:
+        case 1792, 2436, 2688, 2778:
             return .iPhonesX
         default:
             return .unknown

@@ -12,14 +12,21 @@ class SendMessageView: UIView {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Type text here"
+        textField.borderStyle = .roundedRect
+        textField.font = UIFont.systemFont(ofSize: 16)
         return textField
     }()
     
     lazy var sendButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Send", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.setTitleColor(.systemGray2, for: .disabled)
+        button.isEnabled = false
         return button
     }()
     
@@ -45,17 +52,18 @@ extension SendMessageView: ViewCode {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: 60),
-            
             textField.topAnchor.constraint(equalTo: topAnchor, constant: 13),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 13),
-            textField.centerYAnchor.constraint(equalTo: sendButton.centerYAnchor),
             
             sendButton.heightAnchor.constraint(equalToConstant: 40),
             sendButton.widthAnchor.constraint(equalToConstant: 40),
+            sendButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 13),
-            sendButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 13)
+            sendButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -13)
         ])
+    }
+    
+    func setupConfigurations() {
+        self.backgroundColor = .systemGray5
     }
 }

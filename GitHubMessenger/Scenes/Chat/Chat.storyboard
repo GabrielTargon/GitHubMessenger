@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -33,9 +32,6 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Send"/>
-                                        <connections>
-                                            <action selector="sendMessage:" destination="8kd-cJ-5Qu" eventType="touchUpInside" id="9Am-G0-Itc"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647058823528" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
@@ -83,14 +79,6 @@
                             <constraint firstItem="Dl5-2f-a49" firstAttribute="leading" secondItem="IM4-df-K3z" secondAttribute="leading" id="Zeb-NI-YvW"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="sendMessageButton" destination="vu3-Mk-7lu" id="hXL-Qv-HZB"/>
-                        <outlet property="sendMessageTextField" destination="72o-97-ELb" id="RTB-cs-iiL"/>
-                        <outlet property="sendMessageView" destination="Dl5-2f-a49" id="rIt-sd-05U"/>
-                        <outlet property="sendMessageViewBottomConstraint" destination="V5q-nr-l2H" id="nGV-tp-9wm"/>
-                        <outlet property="sendMessageViewHeightConstraint" destination="phN-7T-X1m" id="PZD-2B-IfF"/>
-                        <outlet property="tableView" destination="n80-n3-hVk" id="Hwo-dX-g92"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kd4-gz-Ua2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
