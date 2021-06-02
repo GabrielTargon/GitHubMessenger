@@ -52,14 +52,14 @@ extension SendMessageView: ViewCode {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            textField.topAnchor.constraint(equalTo: topAnchor, constant: 13),
-            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            textField.centerYAnchor.constraint(equalTo: centerYAnchor),
+            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             
-            sendButton.heightAnchor.constraint(equalToConstant: 40),
-            sendButton.widthAnchor.constraint(equalToConstant: 40),
-            sendButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
-            sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 13),
-            sendButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -13)
+            sendButton.widthAnchor.constraint(equalToConstant: 50),
+            sendButton.topAnchor.constraint(equalTo: textField.topAnchor),
+            sendButton.bottomAnchor.constraint(equalTo: textField.bottomAnchor),
+            sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 10),
+            sendButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
     

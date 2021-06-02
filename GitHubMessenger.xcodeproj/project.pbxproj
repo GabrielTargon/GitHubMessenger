@@ -55,6 +55,8 @@
 		B5A605F8263CBF5C00AE1CDD /* NamesListRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A605F7263CBF5C00AE1CDD /* NamesListRouterTests.swift */; };
 		B5C0D935249BB591005B1934 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */; };
 		B5C690F42542741A00D94705 /* Messenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5C690F22542741A00D94705 /* Messenger.xcdatamodeld */; };
+		B5FE63D226557E4000B0F98B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FE63D126557E4000B0F98B /* ChatView.swift */; };
+		B5FE63D6265582BD00B0F98B /* CellInstantiatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FE63D5265582BD00B0F98B /* CellInstantiatable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +131,8 @@
 		B5A605F7263CBF5C00AE1CDD /* NamesListRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListRouterTests.swift; sourceTree = "<group>"; };
 		B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		B5C690F32542741A00D94705 /* Messenger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Messenger.xcdatamodel; sourceTree = "<group>"; };
+		B5FE63D126557E4000B0F98B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		B5FE63D5265582BD00B0F98B /* CellInstantiatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellInstantiatable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +192,7 @@
 			children = (
 				B51D20D32422BC36005607E3 /* Cells */,
 				B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */,
+				B5FE63D126557E4000B0F98B /* ChatView.swift */,
 				B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */,
 				B51DCC94241B26CE0030C9F9 /* ChatPresenter.swift */,
 				B51DCC95241B26CE0030C9F9 /* ChatWorker.swift */,
@@ -348,6 +353,7 @@
 			children = (
 				B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */,
 				B503C1332638E1A30013E18F /* ViewCode.swift */,
+				B5FE63D5265582BD00B0F98B /* CellInstantiatable.swift */,
 			);
 			path = "Support Files";
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 			files = (
 				B550ABFD2419E346004CA78D /* NamesListInteractor.swift in Sources */,
 				B550ABFA2419E346004CA78D /* NamesListRouter.swift in Sources */,
+				B5FE63D226557E4000B0F98B /* ChatView.swift in Sources */,
 				B51DCC9D241B26CE0030C9F9 /* ChatModels.swift in Sources */,
 				B550ABF82419E346004CA78D /* NamesListPresenter.swift in Sources */,
 				B503C1322638DFBA0013E18F /* BubbleCell.swift in Sources */,
@@ -504,6 +511,7 @@
 				B503C1362638FCB90013E18F /* CellType.swift in Sources */,
 				B503C1342638E1A30013E18F /* ViewCode.swift in Sources */,
 				B51DCC9E241B26CE0030C9F9 /* ChatViewController.swift in Sources */,
+				B5FE63D6265582BD00B0F98B /* CellInstantiatable.swift in Sources */,
 				B550ABFC2419E346004CA78D /* NamesListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

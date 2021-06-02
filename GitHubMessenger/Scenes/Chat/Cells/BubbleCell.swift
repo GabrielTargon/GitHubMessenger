@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BubbleCell: UITableViewCell {
+class BubbleCell: UITableViewCell, CellInstantiatable {
     
     lazy var bubbleImage: UIImageView = {
         let image = UIImageView()

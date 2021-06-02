@@ -20,40 +20,10 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     var interactor: ChatBusinessLogic?
     var router: (ChatRoutingProtocol)?
     
-    lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.tableFooterView = UIView()
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
-        return tableView
-    }()
-    
-    lazy var sendMessageView: SendMessageView = {
-        let view = SendMessageView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.textField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        view.sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
-        return view
-    }()
-    
-    lazy var grayBottomView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemGray5
-        return view
-    }()
+    private var customView = ChatView()
     
     var user = String()
     var messages: [NSManagedObject] = []
-    private var isKeyboardVisible: Bool = false
-    private var willDismissKeyboard: Bool = false
-    private var sendMessageFrameY: CGFloat = 34
-    private let sendMessageViewHeight: CGFloat = 60
-    private var keyboardSize: CGRect = CGRect.init(x: 0, y: 0, width: 0, height: 0)
-    private var cellIdentifier = String(describing: BubbleCell.self)
-    
-    private var sendMessageViewBottomConstraint = NSLayoutConstraint()
     
     // MARK: Lifecycle
     
@@ -65,11 +35,6 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        scrollToBottom()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,65 +63,13 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
         self.title = user
     }
     
-    func scrollToBottom() {
-        let point = CGPoint(x: 0, y: tableView.contentSize.height + tableView.contentInset.bottom - tableView.frame.height)
-        if point.y >= 0 {
-            tableView.setContentOffset(point, animated: true)
-        }
-        tableView.layoutIfNeeded()
-    }
-    
-    // MARK: Keyboard behaviour
-
-    @objc func keyboardDidShow(_ notification: NSNotification) {
-        isKeyboardVisible = true
-        guard let info = notification.userInfo else{
-            return
-        }
-        let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        keyboardSize = keyboardFrame
-    }
-
-    @objc func keyboardWillShow(_ notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            sendMessageViewBottomConstraint.constant = -keyboardFrame.height + grayBottomView.frame.height
-            scrollToBottom()
-        }
-    }
-
-    @objc func keyboardDidHide(_ notification: NSNotification) {
-        isKeyboardVisible = false
-        willDismissKeyboard = false
-        keyboardSize = CGRect.zero
-    }
-
-    @objc func keyboardWillHide(_ notification: NSNotification) {
-        sendMessageViewBottomConstraint.constant = 0
-    }
-    
-    // MARK: Actions
-    
-    @objc func editingChanged(sender: UITextField) {
-        guard let name = sendMessageView.textField.text, !name.isEmpty else {
-            sendMessageView.sendButton.isEnabled = false
-            return
-        }
-        
-        sendMessageView.sendButton.isEnabled = true
-    }
-    
-    @objc func sendMessage(_ sender: Any) {
-        if let text = sendMessageView.textField.text {
+    func sendMessage() {
+        if let text = customView.sendMessageView.textField.text {
             interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .incoming, date: Date(), friend: user))
             interactor?.saveMessage(request: Chat.Message.Request(text: text, type: .outgoing, date: Date(), friend: user))
+            
             getInfos()
-            
-            tableView.reloadData()
-            
-            sendMessageView.textField.text = nil
-            sendMessageView.sendButton.isEnabled = false
-            scrollToBottom()
+            customView.sendMessage(messages: messages)
         }
     }
 }
@@ -171,11 +84,11 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         let typeMsg = messages[indexPath.row]
         if typeMsg.value(forKeyPath: "friend") as? String == user {
             if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
-                let incomingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! BubbleCell
+                let incomingCell = tableView.dequeueReusableCell(withIdentifier: BubbleCell.cellIdentifier) as! BubbleCell
                 incomingCell.type = .incoming
                 return incomingCell
             } else if typeMsg.value(forKeyPath: "type") as? String == "outgoing" {
-                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! BubbleCell
+                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: BubbleCell.cellIdentifier) as! BubbleCell
                 outgoingCell.type = .outgoing
                 return outgoingCell
             }
@@ -209,49 +122,19 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChatViewController: ViewCode {
     func setupHierarchy() {
-        view.addSubview(tableView)
-        view.addSubview(sendMessageView)
-        view.addSubview(grayBottomView)
+        view = customView
     }
     
     func setupConstraints() {
-        sendMessageViewBottomConstraint = NSLayoutConstraint(item: sendMessageView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: grayBottomView, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            sendMessageView.heightAnchor.constraint(equalToConstant: sendMessageViewHeight),
-            sendMessageView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
-            sendMessageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            sendMessageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            sendMessageViewBottomConstraint,
-            
-            grayBottomView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            grayBottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            grayBottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            grayBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        ])
+        //No constraints needed
     }
     
     func setupConfigurations() {
         view.backgroundColor = .white
         
-        // TableView
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(BubbleCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
-        tableView.allowsSelection = false
-        
-        // Observers
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
-        
-        sendMessageFrameY = sendMessageView.frame.origin.y
+        customView.tableView.dataSource = self
+        customView.tableView.delegate = self
+        customView.scrollToBottom()
+        customView.didTouchAtSendAction = sendMessage
     }
 }
