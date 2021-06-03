@@ -30,7 +30,23 @@ extension ChatInteractorSpy: ChatBusinessLogic {
     
     func getMessages() -> [NSManagedObject] {
         getMessagesCalled = true
-        return [NSManagedObject]()
+        
+        var messages: [NSManagedObject] = []
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return [NSManagedObject]()
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Message")
+        
+        do {
+            messages = try managedContext.fetch(fetchRequest)
+            return messages
+        } catch let error as NSError {
+            print("Error to load CoreData: \(error)")
+            return [NSManagedObject]()
+        }
     }
     
     func saveMessage(request: Chat.Message.Request) {

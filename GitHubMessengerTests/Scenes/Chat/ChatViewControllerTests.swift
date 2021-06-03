@@ -22,10 +22,9 @@ final class ChatViewControllerTests: XCTestCase {
     // MARK: Test lifecycle
     override func setUp() {
         super.setUp()
-        sut = ChatViewController.instantiateNew()
+        sut = ChatViewController()
         interactorSpy = ChatInteractorSpy()
         routerSpy = ChatRouterSpy()
-        setupChatViewController()
         sut.setup(interactor: interactorSpy, router: routerSpy)
     }
     
@@ -36,15 +35,6 @@ final class ChatViewControllerTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: Test setup
-    
-    func setupChatViewController() {
-        let bundle = Bundle.main
-        let storyboard = UIStoryboard(name: "Chat", bundle: bundle)
-        sut = storyboard.instantiateViewController(withIdentifier: "ChatViewController") as? ChatViewController
-        sut.loadViewIfNeeded()
-    }
-    
     // MARK: Tests
     func testGetInfos() {
         sut.getInfos()
@@ -52,10 +42,8 @@ final class ChatViewControllerTests: XCTestCase {
     }
     
     func testSendMessage() {
-        sut.sendMessage(UIButton.Event.touchUpInside)
+        sut.messages = interactorSpy.getMessages()
+        sut.sendMessage()
         XCTAssert(interactorSpy.saveMessageCalled)
-        XCTAssertEqual(sut.sendMessageTextField.text, "")
-        XCTAssertFalse(sut.sendMessageButton.isEnabled)
     }
-    
 }

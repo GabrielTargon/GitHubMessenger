@@ -20,7 +20,7 @@ class ChatViewController: UIViewController, ChatDisplayLogic {
     var interactor: ChatBusinessLogic?
     var router: (ChatRoutingProtocol)?
     
-    private var customView = ChatView()
+    var customView = ChatView()
     
     var user = String()
     var messages: [NSManagedObject] = []
@@ -134,7 +134,6 @@ extension ChatViewController: ViewCode {
         
         customView.tableView.dataSource = self
         customView.tableView.delegate = self
-        customView.scrollToBottom()
         customView.didTouchAtSendAction = sendMessage
     }
 }
