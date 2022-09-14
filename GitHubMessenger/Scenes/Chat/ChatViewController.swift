@@ -82,18 +82,19 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let typeMsg = messages[indexPath.row]
+        guard let bubbleCell = tableView.dequeueReusableCell(withIdentifier: BubbleCell.cellIdentifier) as? BubbleCell else {
+            return UITableViewCell()
+        }
+        
         if typeMsg.value(forKeyPath: "friend") as? String == user {
             if typeMsg.value(forKeyPath: "type") as? String == "incoming" {
-                let incomingCell = tableView.dequeueReusableCell(withIdentifier: BubbleCell.cellIdentifier) as! BubbleCell
-                incomingCell.type = .incoming
-                return incomingCell
+                bubbleCell.type = .incoming
             } else if typeMsg.value(forKeyPath: "type") as? String == "outgoing" {
-                let outgoingCell = tableView.dequeueReusableCell(withIdentifier: BubbleCell.cellIdentifier) as! BubbleCell
-                outgoingCell.type = .outgoing
-                return outgoingCell
+                bubbleCell.type = .outgoing
             }
         }
-        return UITableViewCell()
+        
+        return bubbleCell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -111,7 +112,6 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         guard let text = messages[indexPath.row].value(forKeyPath: "text") as? String else {
             return
         }
-        
         guard let chatCell = cell as? BubbleCell else {
             return
         }

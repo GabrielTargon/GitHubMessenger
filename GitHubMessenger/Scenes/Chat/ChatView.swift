@@ -10,12 +10,17 @@ import UIKit
 import CoreData
 
 final class ChatView: UIView {
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(BubbleCell.self, forCellReuseIdentifier: BubbleCell.cellIdentifier)
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 44
+        tableView.allowsSelection = false
         return tableView
     }()
     
@@ -133,12 +138,6 @@ extension ChatView: ViewCode {
     
     func setupConfigurations() {
         backgroundColor = .white
-        
-        // TableView
-        tableView.register(BubbleCell.self, forCellReuseIdentifier: BubbleCell.cellIdentifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
-        tableView.allowsSelection = false
         
         // Observers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)

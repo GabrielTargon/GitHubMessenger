@@ -20,7 +20,6 @@
 		B51DCC9E241B26CE0030C9F9 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC98241B26CE0030C9F9 /* ChatViewController.swift */; };
 		B51DCC9F241B26CE0030C9F9 /* ChatInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */; };
 		B550ABB52419DF9A004CA78D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B550ABB42419DF9A004CA78D /* AppDelegate.swift */; };
-		B550ABBC2419DF9A004CA78D /* NamesList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B550ABBA2419DF9A004CA78D /* NamesList.storyboard */; };
 		B550ABBE2419DF9C004CA78D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B550ABBD2419DF9C004CA78D /* Assets.xcassets */; };
 		B550ABC12419DF9C004CA78D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B550ABBF2419DF9C004CA78D /* LaunchScreen.storyboard */; };
 		B550ABCC2419DF9D004CA78D /* GitHubMessengerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B550ABCB2419DF9D004CA78D /* GitHubMessengerUITests.swift */; };
@@ -53,6 +52,7 @@
 		B5A605F4263C9E2F00AE1CDD /* NamesListRouterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A605F3263C9E2F00AE1CDD /* NamesListRouterSpy.swift */; };
 		B5A605F6263C9E3D00AE1CDD /* NamesListPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A605F5263C9E3D00AE1CDD /* NamesListPresenterSpy.swift */; };
 		B5A605F8263CBF5C00AE1CDD /* NamesListRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A605F7263CBF5C00AE1CDD /* NamesListRouterTests.swift */; };
+		B5B1FE3D28D1FF4200D949AF /* NamesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B1FE3C28D1FF4200D949AF /* NamesListView.swift */; };
 		B5C0D935249BB591005B1934 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */; };
 		B5C690F42542741A00D94705 /* Messenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5C690F22542741A00D94705 /* Messenger.xcdatamodeld */; };
 		B5FE63D226557E4000B0F98B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FE63D126557E4000B0F98B /* ChatView.swift */; };
@@ -91,7 +91,6 @@
 		B51DCC99241B26CE0030C9F9 /* ChatInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInteractor.swift; sourceTree = "<group>"; };
 		B550ABB12419DF9A004CA78D /* GitHubMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B550ABB42419DF9A004CA78D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B550ABBB2419DF9A004CA78D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NamesList.storyboard; sourceTree = "<group>"; };
 		B550ABBD2419DF9C004CA78D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B550ABC02419DF9C004CA78D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B550ABC22419DF9C004CA78D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -129,6 +128,7 @@
 		B5A605F3263C9E2F00AE1CDD /* NamesListRouterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListRouterSpy.swift; sourceTree = "<group>"; };
 		B5A605F5263C9E3D00AE1CDD /* NamesListPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListPresenterSpy.swift; sourceTree = "<group>"; };
 		B5A605F7263CBF5C00AE1CDD /* NamesListRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListRouterTests.swift; sourceTree = "<group>"; };
+		B5B1FE3C28D1FF4200D949AF /* NamesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamesListView.swift; sourceTree = "<group>"; };
 		B5C0D934249BB591005B1934 /* UIDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		B5C690F32542741A00D94705 /* Messenger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Messenger.xcdatamodel; sourceTree = "<group>"; };
 		B5FE63D126557E4000B0F98B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -251,8 +251,8 @@
 			isa = PBXGroup;
 			children = (
 				B550AC042419E77F004CA78D /* Cell */,
-				B550ABBA2419DF9A004CA78D /* NamesList.storyboard */,
 				B550ABF62419E346004CA78D /* NamesListViewController.swift */,
+				B5B1FE3C28D1FF4200D949AF /* NamesListView.swift */,
 				B550ABF72419E346004CA78D /* NamesListInteractor.swift */,
 				B550ABF22419E346004CA78D /* NamesListPresenter.swift */,
 				B550ABF42419E346004CA78D /* NamesListRouter.swift */,
@@ -464,7 +464,6 @@
 			files = (
 				B550ABC12419DF9C004CA78D /* LaunchScreen.storyboard in Resources */,
 				B550ABBE2419DF9C004CA78D /* Assets.xcassets in Resources */,
-				B550ABBC2419DF9A004CA78D /* NamesList.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,6 +494,7 @@
 				B51DCC9D241B26CE0030C9F9 /* ChatModels.swift in Sources */,
 				B550ABF82419E346004CA78D /* NamesListPresenter.swift in Sources */,
 				B503C1322638DFBA0013E18F /* BubbleCell.swift in Sources */,
+				B5B1FE3D28D1FF4200D949AF /* NamesListView.swift in Sources */,
 				B503C1382639FEB10013E18F /* SendMessageView.swift in Sources */,
 				B550ABFB2419E346004CA78D /* NamesListModels.swift in Sources */,
 				B550ABF92419E346004CA78D /* NamesListWorker.swift in Sources */,
@@ -569,14 +569,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		B550ABBA2419DF9A004CA78D /* NamesList.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B550ABBB2419DF9A004CA78D /* Base */,
-			);
-			name = NamesList.storyboard;
-			sourceTree = "<group>";
-		};
 		B550ABBF2419DF9C004CA78D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -23,19 +23,9 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
     var interactor: NamesListBusinessLogic?
     var router: (NamesListRoutingProtocol)?
     
+    var namesView = NamesListView()
+    
     var userList = [NamesList.User]()
-    private var cellIdentifier = String(describing: NameListCell.self)
-    
-    @IBOutlet var tableView: UITableView!
-    
-    lazy var indicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        activityIndicator.style = .large
-        activityIndicator.center = self.view.center
-        activityIndicator.backgroundColor = .white
-        activityIndicator.hidesWhenStopped = true
-        return activityIndicator
-    }()
     
     // MARK: Object lifecycle
     
@@ -70,7 +60,7 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        indicator.startAnimating()
+        namesView.indicator.startAnimating()
         interactor?.handleGetUserInfo()
     }
     
@@ -84,7 +74,7 @@ class NamesListViewController: UIViewController, NamesListDisplayLogic {
         userList = viewModel
         
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.namesView.tableView.reloadData()
         }
     }
 }
@@ -100,24 +90,35 @@ extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! NameListCell
+        guard let cell = namesView.tableView.dequeueReusableCell(withIdentifier: namesView.cellIdentifier) as? NameListCell else {
+            return UITableViewCell()
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let userCell = cell as? NameListCell {
             if !userList.isEmpty {
-                indicator.stopAnimating()
+                namesView.indicator.stopAnimating()
                 
                 userCell.imageProfile.image = nil
                 userCell.labelProfile.text = userList[indexPath.row].login
                 
-                let url = URL(string: userList[indexPath.row].avatarUrl)
-                
                 DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url!)
-                    DispatchQueue.main.async {
-                        userCell.imageProfile.image = UIImage(data: data!)
+                    guard let url = URL(string: self.userList[indexPath.row].avatarUrl) else {
+                        return
+                    }
+                    
+                    do {
+                        let data = try Data(contentsOf: url)
+                        DispatchQueue.main.async {
+                            userCell.imageProfile.image = UIImage(data: data)
+                        }
+                    } catch let error as NSError {
+                        DispatchQueue.main.async {
+                            userCell.imageProfile.image = UIImage(named: "user_default")
+                        }
+                        print("Could not fetch. \(error), \(error.userInfo)")
                     }
                 }
             }
@@ -131,7 +132,10 @@ extension NamesListViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension NamesListViewController: ViewCode {
     func setupHierarchy() {
-        view.addSubview(indicator)
+        view = namesView
+        
+        namesView.tableView.delegate = self
+        namesView.tableView.dataSource = self
     }
     
     func setupConstraints() {
@@ -139,8 +143,7 @@ extension NamesListViewController: ViewCode {
     }
     
     func setupConfigurations() {
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.register(NameListCell.self, forCellReuseIdentifier: cellIdentifier)
+        self.title = "GitHubMessenger"
+        view.backgroundColor = .white
     }
 }
